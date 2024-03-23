@@ -26,7 +26,7 @@ const main = async () => {
       //const mediaUrl = req.body.mediaUrl
 
       // Definir la fecha de vencimiento
-      const fechaVencimiento = new Date(date); // 10pm del día 22/03/2024
+      const fechaVencimiento = new Date(date);
 
       // Calcular dos horas antes de la fecha de vencimiento
       const dosHorasAntes = fechaVencimiento.getTime() - 2 * 60 * 60 * 1000; // 2 horas en milisegundos
