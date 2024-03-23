@@ -19,11 +19,7 @@ const main = async () => {
   // Calcular dos horas antes de la fecha de vencimiento
   const dosHorasAntes = fechaVencimiento.getTime() - 2 * 60 * 60 * 1000; // 2 horas en milisegundos
 
-<<<<<<< HEAD
   //tiempo restante en Timestamp (milisegundos)
-=======
-  //tiempo restante en Timestamp 
->>>>>>> 17321ab1c23c76ba7a3d6742a31b038c4f7a6dff
   const tiempoRestante = dosHorasAntes - Date.now();
 
   //iniciamos el servidor
