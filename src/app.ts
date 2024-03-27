@@ -7,6 +7,9 @@ import {
 } from "@bot-whatsapp/bot";
 import { BaileysProvider, handleCtx } from "@bot-whatsapp/provider-baileys";
 
+// Configura la zona horaria a América/Bogotá
+process.env.TZ = 'America/Bogota';
+
 //aqui se pueden agregar diversos mensajes automaticos
 const flowBienvenida = addKeyword("hola").addAnswer(
   "¡Hola! Este es un mensaje Automatico"
