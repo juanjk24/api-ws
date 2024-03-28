@@ -4,16 +4,40 @@ import {
   MemoryDB,
   createProvider,
   addKeyword,
+  /* EVENTS, */
 } from "@bot-whatsapp/bot";
 import { BaileysProvider, handleCtx } from "@bot-whatsapp/provider-baileys";
 
-// Configura la zona horaria a América/Bogotá
-process.env.TZ = 'America/Bogota';
+// Configura la zona horaria de Colombia
+process.env.TZ = "America/Bogota";
 
 //aqui se pueden agregar diversos mensajes automaticos
-const flowBienvenida = addKeyword("hola").addAnswer(
-  "¡Hola! Este es un mensaje Automatico"
-);
+const flowBienvenida = addKeyword([/* EVENTS.WELCOME, */ "hola", "opciones"])
+  .addAnswer(
+    "¡Hola! Bienvenido al chatBot de SURATRANS. ¿En que puedo ayudarte el dia de hoy?"
+  )
+  .addAnswer(
+    "Por favor, elige una opción:\n1. Opción 1\n2. Opción 2\n3. Opción 3",
+    {capture: true},
+    (ctx, { fallBack, flowDynamic }) => {
+      const opcion = Number(ctx.body);
+
+      if (isNaN(opcion) || opcion < 1 || opcion > 3) {
+        return fallBack()
+      } else {
+        switch (opcion) {
+          case 1:
+            return flowDynamic(
+              `Tu opción: ${opcion}\nlink de suratrans: https://suratrans.jnixsoft.com/`
+            );
+          case 2:
+            return flowDynamic("opción 2");
+          case 3:
+            return flowDynamic("opcion 3");
+        }
+      }
+    }
+  );
 
 const main = async () => {
   //iniciamos el servidor
