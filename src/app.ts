@@ -17,13 +17,13 @@ const flowBienvenida = addKeyword([/* EVENTS.WELCOME, */ "hola", "opciones"])
     "¡Hola! Bienvenido al chatBot de SURATRANS. ¿En que puedo ayudarte el dia de hoy?"
   )
   .addAnswer(
-    "Por favor, elige una opción:\n1. Opción 1\n2. Opción 2\n3. Opción 3",
-    {capture: true},
+    "Por favor, elige una opción:\n1. Ver el enlace de Suratrans\n2. Opción 2\n3. Opción 3",
+    { capture: true },
     (ctx, { fallBack, flowDynamic }) => {
       const opcion = Number(ctx.body);
 
       if (isNaN(opcion) || opcion < 1 || opcion > 3) {
-        return fallBack()
+        return fallBack();
       } else {
         switch (opcion) {
           case 1:
@@ -50,7 +50,11 @@ const main = async () => {
       const phone = req.body.phone;
       const message = req.body.message;
       const date = req.body.date;
-      //const mediaUrl = req.body.mediaUrl
+      const hours = req.body.hours;
+      //const mediaUrl = req.body.mediaUrl //para enviar un archivo media (imagen, video, pdf)
+
+      console.log(phone, message, date, hours);
+      
 
       // Definir la fecha de vencimiento
       const fechaVencimiento = new Date(date);
@@ -62,10 +66,11 @@ const main = async () => {
       const tiempoRestante = dosHorasAntes - Date.now();
 
       setTimeout(async () => {
-        await bot.sendMessage(`57${phone}`, message, {
+        await bot.sendMessage(`57${phone}`, `${message}`, {
           //media: mediaUrl
+          
         });
-      }, tiempoRestante);
+      }, 1); //para enviar un mensaje 2 horas antes de la fecha limite cambiar el "1" por tiempoRestante
 
       res.end("Mensaje enviado");
     })
