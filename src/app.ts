@@ -53,20 +53,32 @@ const main = async () => {
       const hours = req.body.hours;
       //const mediaUrl = req.body.mediaUrl //para enviar un archivo media (imagen, video, pdf)
 
-      console.log(phone, message, date, hours);
+      //Dividir la hora y minutos
+      let horaMinutos = hours.split(":")
+      let hora = Number(horaMinutos[0])
+      let minutos = Number(horaMinutos[1])
+
+      //convertir a formato 12 horas
+      let sufijo = hora >= 12 ? "PM": "AM"
+
+      //verificar si es medio dia o medianoche
+      hora = hora > 12 ? hora - 12 : hora
+      hora = hora === 0 ? 12 : hora
+
+      //nueva hora con formato 12 horas
+      let nuevaHora = `${hora}:${minutos < 10 ? "0": ""}${minutos} ${sufijo}`
+
+      console.log(phone, message, date, nuevaHora);
       
-
       // Definir la fecha de vencimiento
-      const fechaVencimiento = new Date(date);
-
+      //const fechaVencimiento = new Date(date);
       // Calcular dos horas antes de la fecha de vencimiento
-      const dosHorasAntes = fechaVencimiento.getTime() - 2 * 60 * 60 * 1000; // 2 horas en milisegundos
-
+      //const dosHorasAntes = fechaVencimiento.getTime() - 2 * 60 * 60 * 1000; // 2 horas en milisegundos
       //tiempo restante en Timestamp (milisegundos)
-      const tiempoRestante = dosHorasAntes - Date.now();
+      //const tiempoRestante = dosHorasAntes - Date.now();
 
       setTimeout(async () => {
-        await bot.sendMessage(`57${phone}`, `${message}`, {
+        await bot.sendMessage(`57${phone}`, `Querido conductor, se le informa que se le ha asignado un formulario Pre-operacional hasta la fecha: ${date} con un plazo maximo hasta: ${nuevaHora}`, {
           //media: mediaUrl
           
         });
