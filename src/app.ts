@@ -12,6 +12,7 @@ import { BaileysProvider, handleCtx } from "@bot-whatsapp/provider-baileys";
 process.env.TZ = "America/Bogota";
 
 //aqui se pueden agregar diversos mensajes automaticos
+//EVENTS.WELCOME => se activa el flujo cuando el usuario envia cualquier palabra
 const flowBienvenida = addKeyword([/* EVENTS.WELCOME, */ "hola", "opciones"])
   .addAnswer(
     "¡Hola! Bienvenido al chatBot de SURATRANS. ¿En que puedo ayudarte el dia de hoy?"
@@ -28,12 +29,12 @@ const flowBienvenida = addKeyword([/* EVENTS.WELCOME, */ "hola", "opciones"])
         switch (opcion) {
           case 1:
             return flowDynamic(
-              `Tu opción: ${opcion}\nlink de suratrans: https://suratrans.jnixsoft.com/`
+              `Tu opción: ${opcion}\nLink de suratrans: https://suratrans.jnixsoft.com/`
             );
           case 2:
-            return flowDynamic("opción 2");
+            return flowDynamic(`Tu opcioón: ${opcion}`);
           case 3:
-            return flowDynamic("opcion 3");
+            return flowDynamic(`Tu opcioón: ${opcion}`);
         }
       }
     }
@@ -49,26 +50,15 @@ const main = async () => {
     handleCtx(async (bot, req, res) => {
       const phone = req.body.phone;
       const message = req.body.message;
-      const date = req.body.date;
-      const hours = req.body.hours;
+      //const date = req.body.date;
+      //const hours = req.body.hours;
       //const mediaUrl = req.body.mediaUrl //para enviar un archivo media (imagen, video, pdf)
 
-      //Dividir la hora y minutos
-      let horaMinutos = hours.split(":")
-      let hora = Number(horaMinutos[0])
-      let minutos = Number(horaMinutos[1])
+      //obtener el primer numero del telefono para saber si es de Colombia o Ecuador
+      const firsNumber = phone.toString()[0]
+      const prefijoTel = firsNumber == "3" ? "57" : "593"
 
-      //convertir a formato 12 horas
-      let sufijo = hora >= 12 ? "PM": "AM"
-
-      //verificar si es medio dia o medianoche
-      hora = hora > 12 ? hora - 12 : hora
-      hora = hora === 0 ? 12 : hora
-
-      //nueva hora con formato 12 horas
-      let nuevaHora = `${hora}:${minutos < 10 ? "0": ""}${minutos} ${sufijo}`
-
-      console.log(phone, message, date, nuevaHora);
+      console.log(`prefijo: ${prefijoTel}, telefono: ${phone}, mensaje: ${message}`);
       
       // Definir la fecha de vencimiento
       //const fechaVencimiento = new Date(date);
@@ -78,7 +68,7 @@ const main = async () => {
       //const tiempoRestante = dosHorasAntes - Date.now();
 
       setTimeout(async () => {
-        await bot.sendMessage(`57${phone}`, `Querido conductor, se le informa que se le ha asignado un formulario Pre-operacional hasta la fecha: ${date} con un plazo maximo hasta: ${nuevaHora}`, {
+        await bot.sendMessage(`${prefijoTel}${phone}`, message, {
           //media: mediaUrl
           
         });
